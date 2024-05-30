@@ -46,6 +46,7 @@ class PaymentController extends Controller
             'isHtmxRequest' => $request->isHtmxRequest(),
             'payment' => $payment,
             'customers' => $customers,
+            'methods' => ['Cash', 'Card', 'Check', 'Transfer'],
         ]);
 
     }
