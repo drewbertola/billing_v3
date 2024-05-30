@@ -23,5 +23,5 @@ Route::get('/invoices', [InvoiceController::class, 'list']);
 Route::get('/payments/edit/{paymentId}/{customerId?}', [PaymentController::class, 'edit']);
 Route::post('/payments/save/{paymentId}', [PaymentController::class, 'save']);
 Route::get('/payments', [PaymentController::class, 'list']);
-Route::get('/lineitems/edit/{lineItemId}', [LineItemController::class, 'edit']);
-Route::post('/lineitems/save/{lineItemId}', [LineItemController::class, 'save']);
+Route::get('/line-items/edit/{invoiceId}/{lineItemId}', [LineItemController::class, 'edit']);
+Route::post('/line-items/save/{lineItemId}', [LineItemController::class, 'save']);
