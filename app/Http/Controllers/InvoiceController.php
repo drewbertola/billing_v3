@@ -6,7 +6,6 @@ use App\Models\Customer;
 use App\Models\Invoice;
 use App\Models\LineItem;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Log;
 use Mauricius\LaravelHtmx\Http\HtmxRequest;
 
 class InvoiceController extends Controller
@@ -95,6 +94,24 @@ class InvoiceController extends Controller
             view('saveResult', [
                 'message' => 'success'
             ]), 200, ['HX-Redirect' => '/invoices']
+        );
+    }
+
+    public function pdf($invoiceId)
+    {
+        $invoice = Invoice::where('id', $invoiceId)->first();
+        $lineItems = LineItem::where('invoiceId', $invoiceId)->get();
+        $customer = Customer::where('id', $invoice->customerId)->first();
+
+        $result = \App\Pdf\Invoice::render($invoice, $lineItems, $customer);
+
+        return response(
+            $result->pdf,
+            200,
+            [
+                'Content-Type' => 'application/pdf',
+                'Content-Disposition' => 'inline; filename="' . $result->file . '"',
+            ]
         );
     }
 }

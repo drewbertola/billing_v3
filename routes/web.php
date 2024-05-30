@@ -16,6 +16,7 @@ Route::get('/customers/edit/{customerId}', [CustomerController::class, 'edit']);
 Route::post('/customers/save/{customerId}', [CustomerController::class, 'save']);
 Route::get('/customers/balance/{customerId}', [CustomerController::class, 'balance']);
 Route::get('/customers', [CustomerController::class, 'list']);
+Route::get('/invoices/pdf/{invoiceId}', [InvoiceController::class, 'pdf']);
 Route::get('/invoices/edit/{invoiceId}/{customerId?}', [InvoiceController::class, 'edit']);
 Route::post('/invoices/save/{invoiceId}', [InvoiceController::class, 'save']);
 Route::get('/invoices/toggle-emailed/{invoiceId}', [InvoiceController::class, 'toggleEmailed']);
