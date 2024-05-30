@@ -28,8 +28,9 @@ find ./storage -type f | xargs chmod 666
 ```
 composer update
 ```
-6. Clear the config cache, run migrations, and add your login (follow prompts):
+6. Generate the app key, clear the config cache, run migrations, and add your login (follow prompts):
 ```
+php artisan key:generate
 php artisan config:clear
 php artisan migrate
 php artisan app:register
