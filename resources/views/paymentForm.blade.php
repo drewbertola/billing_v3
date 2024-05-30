@@ -14,15 +14,17 @@
             @csrf
             <div class="row mb-2">
                 <label class="col-form-label col-md-3" for="customerId">Customer</label>
-                <select class="col-md-9" name="customerId" id="customerId">
-                    @foreach ($customers as $customer)
-                        <option value="{{$customer['id']}}"
-                            @if ($customer['id'] == $payment['customerId'])
-                                selected
-                            @endif
-                        >{{$customer['name']}}</option>
-                    @endforeach
-                </select>
+                <div class="col-md-9 p-0">
+                    <select class="form-select" name="customerId" id="customerId">
+                        @foreach ($customers as $customer)
+                            <option value="{{$customer['id']}}"
+                                @if ($customer['id'] == $payment['customerId'])
+                                    selected
+                                @endif
+                            >{{$customer['name']}}</option>
+                        @endforeach
+                    </select>
+                </div>
             </div>
             <div class="row mb-2">
                 <label class="col-form-label col-md-3" for="date">Date</label>
@@ -34,15 +36,17 @@
             </div>
             <div class="row mb-2">
                 <label class="col-form-label col-md-3" for="method">Method</label>
-                <select class="col-md-9" name="method" id="method">
-                    @foreach ($methods as $method)
-                        <option value="{{$method}}"
-                            @if ($method === $payment['method'])
-                                selected
-                            @endif
-                        >{{$method}}</option>
-                    @endforeach
-                </select>
+                <div class="col-md-9 p-0">
+                    <select class="form-select" name="method" id="method">
+                        @foreach ($methods as $method)
+                            <option value="{{$method}}"
+                                @if ($method === $payment['method'])
+                                    selected
+                                @endif
+                            >{{$method}}</option>
+                        @endforeach
+                    </select>
+                </div>
             </div>
             <div class="row mb-2">
                 <label class="col-form-label col-md-3" for="number">Number</label>
