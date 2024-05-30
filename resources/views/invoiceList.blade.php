@@ -16,7 +16,7 @@
                 ><span class="bi bi-file-earmark-plus-fill fs-4"></span></a>
             </div>
             <div class="table-responsive">
-                <table class="table table-hover mx-auto mb-5" id="customerTable">
+                <table class="table table-hover mx-auto mb-5" id="invoiceTable">
                     <thead>
                         <th class="text-center">Invoice #</th>
                         <th class="text-center">Customer</th>
