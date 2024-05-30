@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\Customer;
+use App\Models\Invoice;
+use App\Models\Payment;
 use Illuminate\Support\Facades\Auth;
 use Mauricius\LaravelHtmx\Http\HtmxRequest;
 
@@ -19,6 +21,49 @@ class CustomerController extends Controller
         return view('customerList', [
             'isHtmxRequest' => $request->isHtmxRequest(),
             'customers' => $customers,
+        ]);
+    }
+
+    public function balance(HtmxRequest $request, $customerId)
+    {
+        $customer = Customer::where('id', $customerId)->select('name')->first();
+
+        $invoices = Invoice::where('customerId', $customerId)->get();
+        $payments = Payment::where('customerId', $customerId)->get();
+
+        $entries = [];
+
+        $invoiceTotal = 0;
+        $paymentTotal = 0;
+
+        foreach ($invoices as $i) {
+            $i->type = 'Invoice';
+            $i->amount = -1 * $i->amount;
+            $entries[] = $i;
+            $invoiceTotal += $i->amount;
+        }
+
+        foreach ($payments as $p) {
+            $p->type = 'Payment';
+            $entries[] = $p;
+            $paymentTotal += $p->amount;
+        }
+
+        usort($entries, 'self::sortEntries');
+
+        $balance = 0;
+
+        foreach ($entries as $e) {
+            $balance += $e->amount;
+            $e->balance = $balance;
+        }
+
+        return view('customerBalance', [
+            'isHtmxRequest' => $request->isHtmxRequest(),
+            'transactions' => $entries,
+            'customerName' => $customer->name,
+            'invTotal' => $invoiceTotal,
+            'pmtTotal' => $paymentTotal,
         ]);
     }
 
@@ -108,5 +153,14 @@ class CustomerController extends Controller
                 'message' => 'success'
             ]), 200, ['HX-Redirect' => '/customers']
         );
+    }
+
+    private static function sortEntries($a, $b)
+    {
+        if ($a->date === $b->date) {
+            return 0;
+        }
+
+        return ($a->date < $b->date) ? -1 : 1;
     }
 }

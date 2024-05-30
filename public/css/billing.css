@@ -28,10 +28,12 @@ a.nav-link.active {
     font-weight: bold;
 }
 
-thead tr {
+thead tr,
+tfoot tr {
     background-color: #eee;
 }
 
-thead tr th {
+thead tr th,
+tfoot tr th {
     background-color: inherit !important;
 }
