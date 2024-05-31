@@ -42,7 +42,7 @@ class PaymentController extends Controller
             $customers = Customer::select('id', 'name')->get();
         }
 
-        return view('paymentForm', [
+        return view('components.paymentForm', [
             'isHtmxRequest' => $request->isHtmxRequest(),
             'payment' => $payment,
             'customers' => $customers,
@@ -72,10 +72,9 @@ class PaymentController extends Controller
 
         $payment->save();
 
-        return response(
-            view('saveResult', [
-                'message' => 'success'
-            ]), 200, ['HX-Redirect' => '/payments']
-        );
+        return view('components.paymentRow', [
+            'isHtmxRequest' => $request->isHtmxRequest(),
+            'payment' => $payment,
+        ]);
     }
 }

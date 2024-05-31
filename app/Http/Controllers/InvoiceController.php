@@ -60,7 +60,7 @@ class InvoiceController extends Controller
             $customers = Customer::select('id', 'name')->get();
         }
 
-        return view('invoiceForm', [
+        return view('components.invoiceForm', [
             'isHtmxRequest' => $request->isHtmxRequest(),
             'invoice' => $invoice,
             'lineItems' => $lineItems,
@@ -85,16 +85,14 @@ class InvoiceController extends Controller
         // line items are saved.
         $invoice->customerId = $request->input('customerId');
         $invoice->date = $request->input('date');
-        $invoice->emailed = $request->input('emailed') === 'on' ? 'Y' : 'N';
         $invoice->note = $request->input('note');
 
         $invoice->save();
 
-        return response(
-            view('saveResult', [
-                'message' => 'success'
-            ]), 200, ['HX-Redirect' => '/invoices']
-        );
+        return view('components.invoiceRow', [
+            'isHtmxRequest' => $request->isHtmxRequest(),
+            'invoice' => $invoice,
+        ]);
     }
 
     public function pdf($invoiceId)

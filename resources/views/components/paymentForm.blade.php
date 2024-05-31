@@ -10,7 +10,7 @@
             <p>Update Payment</p>
         @endif
         <p class="text-danger text-center fw-bold" id="saveResult"></p>
-        <form class="col-md-6 mx-auto">
+        <form class="m-4">
             @csrf
             <div class="row mb-2">
                 <label class="col-form-label col-md-3" for="customerId">Customer</label>
@@ -52,11 +52,18 @@
                 <label class="col-form-label col-md-3" for="number">Number</label>
                 <input class="col-md-9" type="text" name="number" id="number" value="{{$payment['number']}}" />
             </div>
-            <div class="form-group row justify-content-end">
-                <button type="submit" class="btn btn-primary col-4 col-md-2 mt-2"
-                    hx-post=/payments/save/{{$payment['id']}}
+            <div class="form-group row justify-content-between mt-4">
+                <button type="button" class="btn btn-secondary col-4 col-md-2 mt-2" data-bs-dismiss="modal">Cancel</button>
+                <button type="submit" class="btn btn-primary col-4 col-md-2 mt-2" data-bs-dismiss="modal"
+                    hx-post="/payments/save/{{$payment['id']}}"
                     hx-trigger="click"
-                    hx-target="#saveResult">Save</button>
+                    hx-target="#paymentRow{{$payment['id']}}"
+                    @if (empty($payment['id']))
+                        hx-swap="afterend"
+                    @else
+                        hx-swap="outerHTML"
+                    @endif
+                >Save</button>
             </div>
     @endauth
 </x-layout>

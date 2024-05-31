@@ -1,20 +1,24 @@
 @php
     $fmt = new NumberFormatter(config('app.locale'), NumberFormatter::CURRENCY);
     $balance = $fmt->formatCurrency($customer->balance, 'USD');
-    $lastInvDate = date('m/d/Y', strtotime($customer->lastInvDate));
+    $lastInvDate = empty($customer->lastInvDate) ? '' : date('m/d/Y', strtotime($customer->lastInvDate));
 @endphp
 
 
-<tr @class([
+<tr id="customerRow{{$customer->id}}"
+    @class([
         'archived' => $customer->archive === 'Y',
         'd-none' => $customer->archive === 'Y',
     ])>
     <td>
         <a href="" class="fw-bold text-decoration-none"
+            data-bs-toggle="modal"
+            data-bs-target="#customerModal"
             hx-get="/customers/edit/{{$customer->id}}"
             hx-trigger="click"
-            hx-target="#content"
-            hx-push-url="true">{{$customer->name}}</a>
+            hx-target="#customerDialog"
+            hx-swap="innerHTML"
+            title="Update Customer">{{$customer->name}}</a>
     </td>
     <td>{{$customer->primaryContact}}</td>
     <td class="text-center">

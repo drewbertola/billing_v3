@@ -98,7 +98,7 @@ class CustomerController extends Controller
             $customer = Customer::find($customerId);
         }
 
-        return view('customerForm', [
+        return view('components.customerForm', [
             'isHtmxRequest' => $request->isHtmxRequest(),
             'customer' => $customer,
         ]);
@@ -148,11 +148,11 @@ class CustomerController extends Controller
 
         $customer->save();
 
-        return response(
-            view('saveResult', [
-                'message' => 'success'
-            ]), 200, ['HX-Redirect' => '/customers']
-        );
+        $tableData = Customer::getTableDataRow($customer->id);
+
+        return view('components.customerRow', [
+            'customer' => $tableData,
+        ]);
     }
 
     private static function sortEntries($a, $b)

@@ -4,14 +4,33 @@
     @endguest
 
     @auth
+        <div class="modal fade modal-lg" id="invoiceModal">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-body" id="invoiceDialog">
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="modal fade modal-lg" id="lineItemModal">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-body" id="lineItemDialog">
+                    </div>
+                </div>
+            </div>
+        </div>
         <div class="mx-auto mt-4">
             <div class="clearfix">
                 <p class="float-start me-4">Invoices</p>
 
                 <a href="" class="float-end"
+                    data-bs-toggle="modal"
+                    data-bs-target="#invoiceModal"
                     hx-get="/invoices/edit/0"
-                    hx-target="#content"
-                    hx-push-url="true"
+                    hx-target="#invoiceDialog"
+                    hx-trigger="click"
+                    hx-swap="innerHTML"
                     title="Add Invoice"
                 ><span class="bi bi-file-earmark-plus-fill fs-4"></span></a>
             </div>
@@ -27,6 +46,7 @@
                         <th class="text-center">View</th>
                     </thead>
                     <tbody>
+                        <tr id="invoiceRow0"></tr>
                         @foreach ($invoices as $invoice)
                             <x-invoiceRow :invoice=$invoice />
                         @endforeach

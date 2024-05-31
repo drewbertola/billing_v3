@@ -42,9 +42,24 @@ const billing = {
         billing.showArchived = ! billing.showArchived;
         billing.updateShowArchived();
     },
+
+    initLineItemTable : () => {
+        if (! document.getElementById('lineItemTableBody')) { return; }
+
+        const USDollar = new Intl.NumberFormat('en-US', {
+            style: 'currency',
+            currency: 'USD',
+        });
+
+        document.body.addEventListener('line-item-update', (e) => {
+            document.getElementById('amount').value = USDollar.format(e.detail.amount);
+            document.getElementById('invoiceAmount' + e.detail.id).innerHTML = USDollar.format(e.detail.amount);
+        });
+    }
 };
 
 document.addEventListener("htmx:load", (e) => {
     billing.initShowArchived();
     billing.initNav();
+    billing.initLineItemTable();
 });

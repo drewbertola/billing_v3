@@ -4,13 +4,13 @@
     @endguest
 
     @auth
-        @if ($customer['id'] === 0)
+        @if ($customer['id'] == '0')
             <p>Add Customer</p>
         @else
             <p>Update Customer</p>
         @endif
         <p class="text-danger text-center fw-bold" id="saveResult"></p>
-        <form class="col-md-6 mx-auto">
+        <form class="m-4">
             @csrf
             <p class="fw-bold mt-4 mb-2">Company</p>
             <div class="row mb-2">
@@ -103,17 +103,24 @@
                 <label class="col-form-label col-md-3" for="archive">Archive</label>
                 <div class="form-check form-switch col-md-9">
                     <input class="form-check-input" type="checkbox" name="archive" id="archive"
-                        @if ($customer['archive'] === 'Y')
-                            checked
-                        @endif
-                        />
+                    @if ($customer['archive'] === 'Y')
+                        checked
+                    @endif
+                    />
                 </div>
             </div>
-            <div class="form-group row justify-content-end">
-                <button type="submit" class="btn btn-primary col-4 col-md-2 mt-2"
+            <div class="form-group row justify-content-between">
+                <button type="button" class="btn btn-secondary col-4 col-md-2 mt-2" data-bs-dismiss="modal">Cancel</button>
+                <button type="submit" class="btn btn-primary col-4 col-md-2 mt-2" data-bs-dismiss="modal"
                     hx-post=/customers/save/{{$customer['id']}}
                     hx-trigger="click"
-                    hx-target="#saveResult">Save</button>
+                    hx-target="#customerRow{{$customer['id']}}"
+                    @if (empty($customer['id']))
+                        hx-swap="beforebegin"
+                    @else
+                        hx-swap="outerHTML"
+                    @endif
+                >Save</button>
             </div>
         </form>
     @endauth

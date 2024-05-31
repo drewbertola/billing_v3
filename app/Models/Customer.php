@@ -75,4 +75,26 @@ class Customer extends Model
 
         return $collection;
     }
+
+    public static function getTableDataRow($customerId)
+    {
+        $collection = DB::table('customer')
+            ->where('customer.id', $customerId)
+            ->select(
+                'customer.id as id',
+                'customer.archive as archive',
+                'customer.name as name',
+                'customer.primaryContact as primaryContact',
+                DB::raw('max(invoice.id) as lastInvId'),
+                DB::raw('max(invoice.date) as lastInvDate'),
+                DB::raw('ifnull(sum(payment.amount) - sum(invoice.amount), 0) as balance')
+            )
+            ->leftJoin('invoice', 'invoice.customerId', '=', 'customer.id')
+            ->leftJoin('payment', 'payment.customerId', '=', 'customer.id')
+            ->groupByRaw('1,2,3,4')
+            ->first();
+
+        return $collection;
+    }
+
 }

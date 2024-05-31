@@ -24,7 +24,7 @@ class LineItemController extends Controller
             $lineItem = LineItem::find($lineItemId);
         }
 
-        return view('lineItemForm', [
+        return view('components.lineItemForm', [
             'isHtmxRequest' => $request->isHtmxRequest(),
             'lineItem' => $lineItem,
         ]);
@@ -52,12 +52,21 @@ class LineItemController extends Controller
         $lineItem->save();
 
         // Importantly, update the total 'amount' for the associated invoice
-        $this->updateInvoiceAmount($lineItem->invoiceId);
+        $invoice = $this->updateInvoiceAmount($lineItem->invoiceId);
+
+        $lineItems = LineItem::where('invoiceId', $lineItem->invoiceId)->get();
+
+        $triggerHeader = json_encode([
+            'line-item-update' => [
+                'amount' => $invoice->amount,
+                'id' => $invoice->id,
+            ]
+        ]);
 
         return response(
-            view('saveResult', [
-                'message' => 'success'
-            ]), 200, ['HX-Redirect' => '/invoices/edit/' . $lineItem->invoiceId]
+            view('components.lineItemBody', [
+                'lineItems' => $lineItems,
+            ]), 200, ['HX-Trigger' => $triggerHeader]
         );
     }
 
@@ -76,5 +85,7 @@ class LineItemController extends Controller
         $invoice->amount = $amount;
 
         $invoice->save();
+
+        return $invoice;
     }
 }
