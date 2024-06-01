@@ -17,18 +17,15 @@
         <p class="text-danger text-center fw-bold" id="saveResult"></p>
         <form class="m-4">
             @csrf
+            <input type="hidden" name="customerId" id="customerId" value="{{$invoice['customerId']}}" />
             <div class="row mb-2">
                 <label class="col-form-label col-md-3" for="customerId">Customer</label>
                 <div class="col-md-9 p-0">
-                    <select class="form-select" name="customerId" id="customerId">
-                        @foreach ($customers as $customer)
-                            <option value="{{$customer['id']}}"
-                                @if ($customer['id'] == $invoice['customerId'])
-                                    selected
-                                @endif
-                            >{{$customer['name']}}</option>
-                        @endforeach
-                    </select>
+                    <input class="form-control" type="text"
+                        name="customerName"
+                        id="customerName"
+                        value="{{$invoice['customer']['name']}}"
+                        autocomplete="off" />
                 </div>
             </div>
             <div class="row mb-2">

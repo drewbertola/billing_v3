@@ -37,3 +37,9 @@ thead tr th,
 tfoot tr th {
     background-color: inherit !important;
 }
+
+div.autoComplete_wrapper,
+input#customerName,
+input#method {
+    width: 100%;
+}

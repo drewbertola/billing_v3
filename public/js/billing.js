@@ -1,5 +1,73 @@
 const billing = {
+    customEventsAdded : false,
     showArchived : false,
+    customers : [],
+    methods : [],
+
+    initCustomEvents : () => {
+        if (billing.customEventsAdded) { return; }
+
+        document.body.addEventListener('line-item-update', (e) => {
+            document.getElementById('amount')
+                .value = billing.formatMoney(e.detail.amount);
+            document.getElementById('invoiceAmount' + e.detail.id)
+                .innerHTML = billing.formatMoney(e.detail.amount);
+        });
+
+        document.body.addEventListener('completions', (e) => {
+            if (typeof e.detail.customers !== 'undefined') {
+                billing.customers = e.detail.customers;
+            }
+
+            if (typeof e.detail.methods !== 'undefined') {
+                billing.methods = e.detail.methods;
+            }
+        });
+
+        document.body.addEventListener('htmx:afterSwap', (e) => {
+            const customerName = document.getElementById('customerName');
+            const customerId = document.getElementById('customerId');
+            const method = document.getElementById('method');
+
+            if (customerName) {
+                const customerCompletions = new autoComplete({
+                    selector: '#customerName',
+                    data: {
+                        src: billing.customers,
+                        keys: ['name'],
+                    },
+                    events: {
+                        input: {
+                            selection: (event) => {
+                                const selection = event.detail.selection.value;
+                                customerCompletions.input.value = selection.name;
+                                customerId.value = selection.id;
+                            }
+                        }
+                    }
+                });
+            }
+
+            if (method) {
+                const methodCompletions = new autoComplete({
+                    selector: '#method',
+                    data: {
+                        src: billing.methods
+                    },
+                    events: {
+                        input: {
+                            selection: (event) => {
+                                const selection = event.detail.selection.value;
+                                methodCompletions.input.value = selection;
+                            }
+                        }
+                    }
+                });
+            }
+        });
+
+        billing.customEventsAdded = true;
+    },
 
     initNav : () => {
         const links = document.querySelectorAll('.nav-link');
@@ -43,23 +111,18 @@ const billing = {
         billing.updateShowArchived();
     },
 
-    initLineItemTable : () => {
-        if (! document.getElementById('lineItemTableBody')) { return; }
-
+    formatMoney : (amount) => {
         const USDollar = new Intl.NumberFormat('en-US', {
             style: 'currency',
             currency: 'USD',
         });
 
-        document.body.addEventListener('line-item-update', (e) => {
-            document.getElementById('amount').value = USDollar.format(e.detail.amount);
-            document.getElementById('invoiceAmount' + e.detail.id).innerHTML = USDollar.format(e.detail.amount);
-        });
+        return USDollar.format(amount);
     }
 };
 
 document.addEventListener("htmx:load", (e) => {
     billing.initShowArchived();
     billing.initNav();
-    billing.initLineItemTable();
+    billing.initCustomEvents();
 });

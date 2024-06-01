@@ -12,18 +12,15 @@
         <p class="text-danger text-center fw-bold" id="saveResult"></p>
         <form class="m-4">
             @csrf
+            <input type="hidden" name="customerId" id="customerId" value="{{$payment['customerId']}}" />
             <div class="row mb-2">
                 <label class="col-form-label col-md-3" for="customerId">Customer</label>
                 <div class="col-md-9 p-0">
-                    <select class="form-select" name="customerId" id="customerId">
-                        @foreach ($customers as $customer)
-                            <option value="{{$customer['id']}}"
-                                @if ($customer['id'] == $payment['customerId'])
-                                    selected
-                                @endif
-                            >{{$customer['name']}}</option>
-                        @endforeach
-                    </select>
+                    <input class="form-control" type="text"
+                        name="customerName"
+                        id="customerName"
+                        value="{{$payment['customer']['name']}}"
+                        autocomplete="off" />
                 </div>
             </div>
             <div class="row mb-2">
@@ -37,15 +34,11 @@
             <div class="row mb-2">
                 <label class="col-form-label col-md-3" for="method">Method</label>
                 <div class="col-md-9 p-0">
-                    <select class="form-select" name="method" id="method">
-                        @foreach ($methods as $method)
-                            <option value="{{$method}}"
-                                @if ($method === $payment['method'])
-                                    selected
-                                @endif
-                            >{{$method}}</option>
-                        @endforeach
-                    </select>
+                    <input class="form-control" type="text"
+                        name="method"
+                        id="method"
+                        value="{{$payment['method']}}"
+                        autocomplete="off" />
                 </div>
             </div>
             <div class="row mb-2">

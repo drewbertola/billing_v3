@@ -33,6 +33,7 @@ class PaymentController extends Controller
                 'date' => date('Y-m-d'),
                 'method' => '',
                 'number' => '',
+                'customer' => ['name' => ''],
             ];
 
             $customers = Customer::select('id', 'name')->where('archive', 'N')->get();
@@ -42,13 +43,18 @@ class PaymentController extends Controller
             $customers = Customer::select('id', 'name')->get();
         }
 
-        return view('components.paymentForm', [
-            'isHtmxRequest' => $request->isHtmxRequest(),
-            'payment' => $payment,
-            'customers' => $customers,
-            'methods' => ['Cash', 'Card', 'Check', 'Transfer'],
+        $triggerHeader = json_encode([
+            'completions' => [
+                'customers' => $customers,
+                'methods' => ['Cash', 'Card', 'Check', 'Transfer'],
+            ],
         ]);
 
+        return response(
+            view('components.paymentForm', [
+                'isHtmxRequest' => $request->isHtmxRequest(),
+                'payment' => $payment,
+            ]), 200, ['HX-Trigger' => $triggerHeader]);
     }
 
     public function save(HtmxRequest $request, $paymentId)

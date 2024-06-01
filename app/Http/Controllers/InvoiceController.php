@@ -51,6 +51,7 @@ class InvoiceController extends Controller
                 'date' => date('Y-m-d'),
                 'emailed' => 'N',
                 'note' => '',
+                'customer' => ['name' => ''],
             ];
             $lineItems = [];
             $customers = Customer::select('id', 'name')->where('archive', 'N')->get();
@@ -60,12 +61,19 @@ class InvoiceController extends Controller
             $customers = Customer::select('id', 'name')->get();
         }
 
-        return view('components.invoiceForm', [
-            'isHtmxRequest' => $request->isHtmxRequest(),
-            'invoice' => $invoice,
-            'lineItems' => $lineItems,
-            'customers' => $customers,
+        $triggerHeader = json_encode([
+            'completions' => [
+                'customers' => $customers,
+            ],
         ]);
+
+        return response(
+            view('components.invoiceForm', [
+                'isHtmxRequest' => $request->isHtmxRequest(),
+                'invoice' => $invoice,
+                'lineItems' => $lineItems,
+            ]), 200, ['HX-Trigger' => $triggerHeader]
+        );
     }
 
     public function save(HtmxRequest $request, $invoiceId)
