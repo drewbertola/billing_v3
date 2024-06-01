@@ -42,4 +42,7 @@ div.autoComplete_wrapper,
 input#customerName,
 input#method {
     width: 100%;
+    color: inherit;
+    border-color: #444;
+    border-radius: 2px;
 }
