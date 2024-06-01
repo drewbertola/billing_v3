@@ -32,9 +32,13 @@ const billing = {
             if (customerName) {
                 const customerCompletions = new autoComplete({
                     selector: '#customerName',
+                    threshold: 0,
                     data: {
                         src: billing.customers,
                         keys: ['name'],
+                    },
+                    resultsList: {
+                        maxResults: 20
                     },
                     events: {
                         input: {
@@ -42,7 +46,10 @@ const billing = {
                                 const selection = event.detail.selection.value;
                                 customerCompletions.input.value = selection.name;
                                 customerId.value = selection.id;
-                            }
+                            },
+                            focus: () => {
+                                customerCompletions.start();
+                            },
                         }
                     }
                 });
@@ -51,15 +58,22 @@ const billing = {
             if (method) {
                 const methodCompletions = new autoComplete({
                     selector: '#method',
+                    threshold: 0,
                     data: {
                         src: billing.methods
+                    },
+                    resultsList: {
+                        maxResults: 20
                     },
                     events: {
                         input: {
                             selection: (event) => {
                                 const selection = event.detail.selection.value;
                                 methodCompletions.input.value = selection;
-                            }
+                            },
+                            focus: () => {
+                                methodCompletions.start();
+                            },
                         }
                     }
                 });
