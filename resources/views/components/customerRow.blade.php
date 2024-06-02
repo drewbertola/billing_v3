@@ -23,9 +23,12 @@
     <td>{{$customer->primaryContact}}</td>
     <td class="text-center">
         <a href="" class="text-decoration-none"
+            data-bs-toggle="modal"
+            data-bs-target="#customerModal"
             hx-get="/invoices/edit/{{$customer->lastInvId}}"
-            hx-target="#content"
-            hx-trigger="click">{{$lastInvDate}}</a>
+            hx-target="#customerDialog"
+            hx-trigger="click"
+            hx-swap="innerHTML">{{$lastInvDate}}</a>
     </td>
     <td class="text-end">
         <a href="" class="text-decoration-none"
@@ -38,17 +41,23 @@
     </td>
     <td class="text-center">
         <a href=""
+            data-bs-toggle="modal"
+            data-bs-target="#customerModal"
             hx-get="/invoices/edit/0/{{$customer->id}}"
-            hx-target="#content"
-            hx-trigger="click">
+            hx-target="#customerDialog"
+            hx-trigger="click"
+            hx-swap="innerHTML">
             <span class="bi bi-file-earmark-plus-fill text-danger"></span>
         </a>
     </td>
     <td class="text-center">
         <a href=""
+            data-bs-toggle="modal"
+            data-bs-target="#customerModal"
             hx-get="/payments/edit/0/{{$customer->id}}"
-            hx-target="#content"
-            hx-trigger="click">
+            hx-target="#customerDialog"
+            hx-trigger="click"
+            hx-swap="innerHTML">
             <span class="bi bi-file-earmark-plus-fill text-success"></span>
         </a>
     </td>

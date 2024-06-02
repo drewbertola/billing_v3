@@ -26,6 +26,8 @@ class PaymentController extends Controller
     public function edit(HtmxRequest $request, $paymentId, $customerId = 0)
     {
         if (empty($paymentId)) {
+            $customerName = empty($customerId) ? '' : Customer::find($customerId)->name;
+
             $payment = [
                 'id' => 0,
                 'customerId' => $customerId,
@@ -33,7 +35,7 @@ class PaymentController extends Controller
                 'date' => date('Y-m-d'),
                 'method' => '',
                 'number' => '',
-                'customer' => ['name' => ''],
+                'customer' => ['name' => $customerName],
             ];
 
             $customers = Customer::select('id', 'name')->where('archive', 'N')->get();

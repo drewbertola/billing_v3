@@ -44,6 +44,8 @@ class InvoiceController extends Controller
     public function edit(HtmxRequest $request, $invoiceId, $customerId = 0)
     {
         if (empty($invoiceId)) {
+            $customerName = empty($customerId) ? '' : Customer::find($customerId)->name;
+
             $invoice = [
                 'id' => 0,
                 'customerId' => $customerId,
@@ -51,8 +53,9 @@ class InvoiceController extends Controller
                 'date' => date('Y-m-d'),
                 'emailed' => 'N',
                 'note' => '',
-                'customer' => ['name' => ''],
+                'customer' => ['name' => $customerName],
             ];
+
             $lineItems = [];
             $customers = Customer::select('id', 'name')->where('archive', 'N')->get();
         } else {
