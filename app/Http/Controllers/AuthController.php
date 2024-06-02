@@ -21,7 +21,7 @@ class AuthController extends Controller
         }
 
         return response(
-            view('comopents.loginResult', [
+            view('components.loginResult', [
                 'loginMessage' => 'Success.'
             ]), 200, ['HX-Redirect' => $request->input('referrer')]
         );
