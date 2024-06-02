@@ -36,6 +36,7 @@
                     <th class="text-end">{{$balance}}</th>
                 </tfoot>
             </table>
+            <button class="btn btn-secondary float-end" data-bs-dismiss="modal">Close</button>
         </div>
 
 
