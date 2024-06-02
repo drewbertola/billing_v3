@@ -24,9 +24,9 @@
     <td class="text-center">
         <a href="" class="text-decoration-none"
             data-bs-toggle="modal"
-            data-bs-target="#customerModal"
+            data-bs-target="#invoiceModal"
             hx-get="/invoices/edit/{{$customer->lastInvId}}"
-            hx-target="#customerDialog"
+            hx-target="#invoiceDialog"
             hx-trigger="click"
             hx-swap="innerHTML">{{$lastInvDate}}</a>
     </td>
@@ -42,9 +42,9 @@
     <td class="text-center">
         <a href=""
             data-bs-toggle="modal"
-            data-bs-target="#customerModal"
+            data-bs-target="#invoiceModal"
             hx-get="/invoices/edit/0/{{$customer->id}}"
-            hx-target="#customerDialog"
+            hx-target="#invoiceDialog"
             hx-trigger="click"
             hx-swap="innerHTML">
             <span class="bi bi-file-earmark-plus-fill text-danger"></span>
@@ -53,9 +53,9 @@
     <td class="text-center">
         <a href=""
             data-bs-toggle="modal"
-            data-bs-target="#customerModal"
+            data-bs-target="#paymentModal"
             hx-get="/payments/edit/0/{{$customer->id}}"
-            hx-target="#customerDialog"
+            hx-target="#paymentDialog"
             hx-trigger="click"
             hx-swap="innerHTML">
             <span class="bi bi-file-earmark-plus-fill text-success"></span>

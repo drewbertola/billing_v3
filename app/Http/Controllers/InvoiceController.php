@@ -75,6 +75,7 @@ class InvoiceController extends Controller
                 'isHtmxRequest' => $request->isHtmxRequest(),
                 'invoice' => $invoice,
                 'lineItems' => $lineItems,
+                'isNative' => stripos($request->getCurrentUrl(), '/invoices'),
             ]), 200, ['HX-Trigger' => $triggerHeader]
         );
     }
@@ -99,6 +100,12 @@ class InvoiceController extends Controller
         $invoice->note = $request->input('note');
 
         $invoice->save();
+
+        if (stripos($request->getCurrentUrl(), '/customers')) {
+            return view('components.customerRow', [
+                'customer' => Customer::getTableDataRow($invoice->customerId),
+            ]);
+        }
 
         return view('components.invoiceRow', [
             'isHtmxRequest' => $request->isHtmxRequest(),

@@ -33,7 +33,7 @@ class PaymentController extends Controller
                 'customerId' => $customerId,
                 'amount' => 0.00,
                 'date' => date('Y-m-d'),
-                'method' => '',
+                'method' => 'Cash',
                 'number' => '',
                 'customer' => ['name' => $customerName],
             ];
@@ -56,6 +56,7 @@ class PaymentController extends Controller
             view('components.paymentForm', [
                 'isHtmxRequest' => $request->isHtmxRequest(),
                 'payment' => $payment,
+                'isNative' => stripos($request->getCurrentUrl(), '/payments'),
             ]), 200, ['HX-Trigger' => $triggerHeader]);
     }
 

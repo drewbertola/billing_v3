@@ -4,10 +4,35 @@
     @endguest
 
     @auth
+        <div class="d-none" id="trash"></div>
         <div class="modal fade modal-lg" id="customerModal">
             <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-body" id="customerDialog">
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="modal fade modal-lg" id="invoiceModal">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-body" id="invoiceDialog">
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="modal fade modal-lg" id="paymentModal">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-body" id="paymentDialog">
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="modal fade modal-lg" id="lineItemModal">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-body" id="lineItemDialog">
                     </div>
                 </div>
             </div>
