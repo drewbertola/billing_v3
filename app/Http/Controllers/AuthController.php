@@ -21,7 +21,7 @@ class AuthController extends Controller
         }
 
         return response(
-            view('loginResult', [
+            view('comopents.loginResult', [
                 'loginMessage' => 'Success.'
             ]), 200, ['HX-Redirect' => $request->input('referrer')]
         );
@@ -36,7 +36,7 @@ class AuthController extends Controller
         $request->session()->regenerateToken();
 
         return response(
-            view('loginResult', [
+            view('components.loginResult', [
                 'loginMessage' => 'Success.'
             ]), 200, ['HX-Redirect' => '/']
         );

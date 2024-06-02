@@ -58,7 +58,7 @@ class CustomerController extends Controller
             $e->balance = $balance;
         }
 
-        return view('customerBalance', [
+        return view('components.customerBalance', [
             'isHtmxRequest' => $request->isHtmxRequest(),
             'transactions' => $entries,
             'customerName' => $customer->name,
@@ -112,7 +112,7 @@ class CustomerController extends Controller
         }
 
         if (empty($request->input('name'))) {
-            return view('saveResult', [
+            return view('components.saveResult', [
                 'isHtmxRequest' => $request->isHtmxRequest(),
                 'message' => 'The customer\'s Name is required.',
             ]);

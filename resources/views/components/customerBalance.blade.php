@@ -11,7 +11,7 @@
     @endguest
 
     @auth
-        <div class="table-responsive col-md-8 mx-auto">
+        <div class="table-responsive m-4">
             <p>Balance Sheet for <span class="fw-bold">{{$customerName}}</span></p>
             <table class="table table-sm table-bordered table-hover rounded">
                 <thead>

@@ -29,9 +29,12 @@
     </td>
     <td class="text-end">
         <a href="" class="text-decoration-none"
+            data-bs-toggle="modal"
+            data-bs-target="#customerModal"
             hx-get="/customers/balance/{{$customer->id}}"
-            hx-target="#content"
-            hx-trigger="click">{{$balance}}</a>
+            hx-target="#customerDialog"
+            hx-trigger="click"
+            hx-swap="innerHTML">{{$balance}}</a>
     </td>
     <td class="text-center">
         <a href=""
