@@ -13,6 +13,11 @@ return new class extends Migration
     {
         Schema::create('invoice', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('customerId')->nullable(false)->default(0);
+            $table->decimal('amount', 10, 2)->nullable(false)->default(0.00);
+            $table->date('date')->nullable(false)->default('2000-01-01');
+            $table->enum('emailed', ['Y', 'N'])->nullable(false)->default('N');
+            $table->text('note')->nullable(false)->default('');
             $table->timestamps();
         });
     }

@@ -13,6 +13,14 @@ return new class extends Migration
     {
         Schema::create('line_item', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('invoiceId')->nullable(false)->default(0);
+            $table->bigInteger('partId')->nullable(true)->default(0);
+            $table->decimal('price', 10, 2)->nullable(false)->default(0.00);
+            $table->string('units', 16)->nullable(false)->default('');
+            $table->decimal('quantity', 6, 2)->nullable(false)->default(0.00);
+            $table->enum('taxable', ['Y', 'N'])->nullable(false)->default('N');
+            $table->decimal('discount', 4, 2)->nullable(false)->default(0.00);
+            $table->string('description', 64)->nullable(false)->default('');
             $table->timestamps();
         });
     }

@@ -13,6 +13,27 @@ return new class extends Migration
     {
         Schema::create('customer', function (Blueprint $table) {
             $table->id();
+            $table->string('name', 64)->nullable(false)->default('');
+            $table->string('bAddress1', 64)->nullable(false)->default('');
+            $table->string('bAddress2', 64)->nullable(false)->default('');
+            $table->string('bCity', 32)->nullable(false)->default('');
+            $table->string('bState', 32)->nullable(false)->default('');
+            $table->string('bZip', 16)->nullable(false)->default('');
+            $table->string('sAddress1', 64)->nullable(false)->default('');
+            $table->string('sAddress2', 64)->nullable(false)->default('');
+            $table->string('sCity', 32)->nullable(false)->default('');
+            $table->string('sState', 32)->nullable(false)->default('');
+            $table->string('sZip', 16)->nullable(false)->default('');
+            $table->string('phoneMain', 16)->nullable(false)->default('');
+            $table->string('fax', 16)->nullable(false)->default('');
+            $table->string('billingContact', 32)->nullable(false)->default('');
+            $table->string('billingEmail', 64)->nullable(false)->default('');
+            $table->string('billingPhone', 16)->nullable(false)->default('');
+            $table->string('shippingContact', 32)->nullable(false)->default('');
+            $table->string('shippingEmail', 64)->nullable(false)->default('');
+            $table->string('shippingPhone', 16)->nullable(false)->default('');
+            $table->decimal('taxRate', 4, 2)->nullable(false)->default(0.00);
+            $table->enum('archive', ['Y', 'N'])->nullable(false)->default('N');
             $table->timestamps();
         });
     }

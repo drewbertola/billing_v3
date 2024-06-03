@@ -13,6 +13,12 @@ return new class extends Migration
     {
         Schema::create('payment', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('customerId')->nullable(false)->default(0);
+            $table->bigInteger('invoiceId')->nullable(true)->default(0);
+            $table->decimal('amount', 10, 2)->nullable(false)->default(0.00);
+            $table->date('date')->nullable(false)->default('2000-01-01');
+            $table->enum('method', ['Cash', 'Check', 'Card', 'Transfer'])->nullable(false)->default('Cash');
+            $table->string('number', 32)->nullable(false)->default('');
             $table->timestamps();
         });
     }
