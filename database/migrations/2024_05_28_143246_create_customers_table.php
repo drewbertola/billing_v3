@@ -29,9 +29,9 @@ return new class extends Migration
             $table->string('billingContact', 32)->nullable(false)->default('');
             $table->string('billingEmail', 64)->nullable(false)->default('');
             $table->string('billingPhone', 16)->nullable(false)->default('');
-            $table->string('shippingContact', 32)->nullable(false)->default('');
-            $table->string('shippingEmail', 64)->nullable(false)->default('');
-            $table->string('shippingPhone', 16)->nullable(false)->default('');
+            $table->string('primaryContact', 32)->nullable(false)->default('');
+            $table->string('primaryEmail', 64)->nullable(false)->default('');
+            $table->string('primaryPhone', 16)->nullable(false)->default('');
             $table->decimal('taxRate', 4, 2)->nullable(false)->default(0.00);
             $table->enum('archive', ['Y', 'N'])->nullable(false)->default('N');
             $table->timestamps();
