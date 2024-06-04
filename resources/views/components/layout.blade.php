@@ -30,6 +30,7 @@
                     <span class="bi bi-list text-white"></span>
                 </button>
                 <div class="collapse navbar-collapse" id="navMain">
+                @auth
                     <div class="navbar-nav me-auto mb-2 mb-md-0">
                         <a href="" id="customersNav"
                             class="nav-link ms-4"
@@ -58,6 +59,7 @@
                             hx-target="#content"
                             hx-push-url="true">Logout</a>
                     </div>
+                @endauth
                 </div>
             </div>
         </nav>
