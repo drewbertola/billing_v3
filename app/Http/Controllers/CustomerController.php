@@ -2,14 +2,20 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\SaveCustomerRequest;
 use App\Models\Customer;
 use App\Models\Invoice;
 use App\Models\Payment;
+use App\Http\Traits\HttpResponses;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Validator;
 use Mauricius\LaravelHtmx\Http\HtmxRequest;
 
 class CustomerController extends Controller
 {
+    use HttpResponses;
+
     public function list(HtmxRequest $request)
     {
         $customers = [];
@@ -104,49 +110,27 @@ class CustomerController extends Controller
         ]);
     }
 
-    public function save(HtmxRequest $request, $customerId)
+    public function save(Request $request, $customerId)
     {
         // handle requests from timed out logins
         if (empty(Auth::user())) {
             return redirect('/');
         }
 
-        if (empty($request->input('name'))) {
-            return view('components.saveResult', [
-                'isHtmxRequest' => $request->isHtmxRequest(),
-                'message' => 'The customer\'s Name is required.',
-            ]);
+        $data = $request->all();
+        $rules = SaveCustomerRequest::rules();
+        $validator = Validator::make($data, $rules);
+
+        if ($validator->fails()) {
+            return $this->modalSaveError($validator->errors(), 'customerModal');
         }
 
         if (empty($customerId)) {
-            $customer = new Customer();
+            $customer = Customer::create($data);
         } else {
             $customer = Customer::find($customerId);
+            $customer->update($data);
         }
-
-        $customer->name = $request->input('name');
-        $customer->phoneMain = $request->input('phoneMain');
-        $customer->fax = $request->input('fax');
-        $customer->primaryContact = $request->input('primaryContact');
-        $customer->primaryEmail = $request->input('primaryEmail');
-        $customer->primaryPhone = $request->input('primaryPhone');
-        $customer->billingContact = $request->input('billingContact');
-        $customer->billingEmail = $request->input('billingEmail');
-        $customer->billingPhone = $request->input('billingPhone');
-        $customer->bAddress1 = $request->input('bAddress1');
-        $customer->bAddress2 = $request->input('bAddress2');
-        $customer->bCity = $request->input('bCity');
-        $customer->bState = $request->input('bState');
-        $customer->bZip = $request->input('bZip');
-        $customer->sAddress1 = $request->input('sAddress1');
-        $customer->sAddress2 = $request->input('sAddress2');
-        $customer->sCity = $request->input('sCity');
-        $customer->sState = $request->input('sState');
-        $customer->sZip = $request->input('sZip');
-        $customer->taxRate = $request->input('taxRate');
-        $customer->archive = $request->input('archive') === 'on' ? 'Y' : 'N';
-
-        $customer->save();
 
         $tableData = Customer::getTableDataRow($customer->id);
 

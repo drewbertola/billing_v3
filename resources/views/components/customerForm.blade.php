@@ -8,7 +8,7 @@
     @else
         <p>Update Customer</p>
     @endif
-    <p class="text-danger text-center fw-bold" id="saveResult"></p>
+    <ul class="text-center fw-bold list-group" id="saveResult"></ul>
     <form class="m-4">
         @csrf
         <p class="fw-bold mt-4 mb-2">Company</p>

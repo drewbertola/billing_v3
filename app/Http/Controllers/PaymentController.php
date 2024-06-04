@@ -2,13 +2,18 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\SavePaymentRequest;
 use App\Models\Customer;
 use App\Models\Payment;
+use App\Http\Traits\HttpResponses;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Validator;
 use Mauricius\LaravelHtmx\Http\HtmxRequest;
 
 class PaymentController extends Controller
 {
+    use HttpResponses;
+
     public function list(HtmxRequest $request)
     {
         $payments = [];
@@ -67,19 +72,20 @@ class PaymentController extends Controller
             return redirect('/');
         }
 
-        if (empty($paymentId)) {
-            $payment = new Payment();
-        } else {
-            $payment = Payment::find($paymentId);
+        $data = $request->all();
+        $rules = SavePaymentRequest::rules();
+        $validator = Validator::make($data, $rules);
+
+        if ($validator->fails()) {
+            return $this->modalSaveError($validator->errors(), 'paymentModal');
         }
 
-        $payment->customerId = $request->input('customerId');
-        $payment->amount = $request->input('amount');
-        $payment->date = $request->input('date');
-        $payment->method = $request->input('method');
-        $payment->number = $request->input('number');
-
-        $payment->save();
+        if (empty($paymentId)) {
+            $payment = Payment::create($data);
+        } else {
+            $payment = Payment::find($paymentId);
+            $payment->update($data);
+        }
 
         return view('components.paymentRow', [
             'isHtmxRequest' => $request->isHtmxRequest(),

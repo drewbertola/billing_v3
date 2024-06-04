@@ -46,3 +46,7 @@ input#method {
     border-color: #444;
     border-radius: 2px;
 }
+
+.bg-input-error {
+    background-color: #f8d7da;
+}

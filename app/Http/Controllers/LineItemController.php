@@ -2,13 +2,18 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\SaveLineItemRequest;
 use App\Models\Invoice;
 use App\Models\LineItem;
+use App\Http\Traits\HttpResponses;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Validator;
 use Mauricius\LaravelHtmx\Http\HtmxRequest;
 
 class LineItemController extends Controller
 {
+    use HttpResponses;
+
     public function edit(HtmxRequest $request, $invoiceId, $lineItemId)
     {
         if (empty($lineItemId)) {
@@ -37,19 +42,20 @@ class LineItemController extends Controller
             return redirect('/');
         }
 
-        if (empty($lineItemId)) {
-            $lineItem = new LineItem();
-        } else {
-            $lineItem = LineItem::find($lineItemId);
+        $data = $request->all();
+        $rules = SaveLineItemRequest::rules();
+        $validator = Validator::make($data, $rules);
+
+        if ($validator->fails()) {
+            return $this->modalSaveError($validator->errors(), 'lineItemModal');
         }
 
-        $lineItem->invoiceId = $request->input('invoiceId');
-        $lineItem->price = $request->input('price');
-        $lineItem->units = $request->input('units');
-        $lineItem->quantity = $request->input('quantity');
-        $lineItem->description = $request->input('description');
-
-        $lineItem->save();
+        if (empty($lineItemId)) {
+            $lineItem = LineItem::create($data);
+        } else {
+            $lineItem = LineItem::find($lineItemId);
+            $lineItem->update($data);
+        }
 
         // Importantly, update the total 'amount' for the associated invoice
         $invoice = $this->updateInvoiceAmount($lineItem->invoiceId);

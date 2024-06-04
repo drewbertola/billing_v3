@@ -8,7 +8,7 @@
     @else
         <p>Update Payment</p>
     @endif
-    <p class="text-danger text-center fw-bold" id="saveResult"></p>
+    <ul class="text-danger text-center fw-bold" id="saveResult"></ul>
     <form class="m-4">
         @csrf
         <input type="hidden" name="customerId" id="customerId" value="{{$payment['customerId']}}" />

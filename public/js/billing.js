@@ -7,6 +7,27 @@ const billing = {
     initCustomEvents : () => {
         if (billing.customEventsAdded) { return; }
 
+        document.body.addEventListener('save-error', (e) => {
+            const modal = new bootstrap.Modal(document.getElementById(e.detail.modal));
+            modal.show();
+
+            const errorList = document.getElementById('saveResult');
+            errorList.innerHTML = '';
+
+            document.querySelectorAll('.bg-input-error').forEach((item) => {
+                item.classList.remove('bg-input-error');
+            });
+
+            Object.keys(e.detail.errorMessages).forEach((key) => {
+                const li = document.createElement('li');
+                li.classList.add('list-group-item');
+                li.classList.add('list-group-item-danger');
+                li.textContent = e.detail.errorMessages[key];
+                errorList.appendChild(li);
+                document.getElementById(key).classList.add('bg-input-error');
+            });
+        });
+
         document.body.addEventListener('line-item-update', (e) => {
             document.getElementById('amount')
                 .value = billing.formatMoney(e.detail.amount);

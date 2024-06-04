@@ -2,14 +2,19 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\SaveInvoiceRequest;
 use App\Models\Customer;
 use App\Models\Invoice;
 use App\Models\LineItem;
+use App\Http\Traits\HttpResponses;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Validator;
 use Mauricius\LaravelHtmx\Http\HtmxRequest;
 
 class InvoiceController extends Controller
 {
+    use HttpResponses;
+
     public function list(HtmxRequest $request)
     {
         $invoices = [];
@@ -87,19 +92,20 @@ class InvoiceController extends Controller
             return redirect('/');
         }
 
-        if (empty($invoiceId)) {
-            $invoice = new Invoice();
-        } else {
-            $invoice = Invoice::find($invoiceId);
+        $data = $request->all();
+        $rules = SaveInvoiceRequest::rules();
+        $validator = Validator::make($data, $rules);
+
+        if ($validator->fails()) {
+            return $this->modalSaveError($validator->errors(), 'invoiceModal');
         }
 
-        // NOTE: $invoice->amount is not saved here.  This is done when
-        // line items are saved.
-        $invoice->customerId = $request->input('customerId');
-        $invoice->date = $request->input('date');
-        $invoice->note = $request->input('note');
-
-        $invoice->save();
+        if (empty($invoiceId)) {
+            $invoice = Invoice::create($data);
+        } else {
+            $invoice = Invoice::find($invoiceId);
+            $invoice->update($data);
+        }
 
         if (stripos($request->getCurrentUrl(), '/customers')) {
             return view('components.customerRow', [
