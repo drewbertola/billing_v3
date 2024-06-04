@@ -2,7 +2,7 @@ const billing = {
     customEventsAdded : false,
     showArchived : false,
     customers : [],
-    methods : ['Cash, Check, Card, Transfer'],
+    methods : [],
 
     initCustomEvents : () => {
         if (billing.customEventsAdded) { return; }
@@ -40,19 +40,39 @@ const billing = {
                 const modal = document.getElementById(e.detail.invoiceOrPayment + 'Modal');
                 const modalBody = modal.querySelector('.modal-body');
 
+                if (typeof e.detail.customers !== 'undefined') {
+                    billing.customers = e.detail.customers;
+                }
+
+                if (typeof e.detail.methods !== 'undefined') {
+                    billing.methods = e.detail.methods;
+                }
+
                 fetch(
                     '/' + e.detail.invoiceOrPayment
                     + 's/edit/' + e.detail.id + '/' + e.detail.customerId
                 )
                 .then(response => { return response.text(); })
-                .then(html => { modalBody.innerHTML = html;
+                .then(html => {
+                    modalBody.innerHTML = html;
                     htmx.process(modalBody);
+
+                    const customerName = document.getElementById('customerName');
+                    const method = document.getElementById('method');
+
+                    if (customerName) {
+                        billing.initCustomerCompletions();
+                    }
+
+                    if (method) {
+                        billing.initMethodCompletions();
+                    }
+
                     new bootstrap.Modal(modal).show();
                 });
 
                 clearInterval(interval);
             }, 250);
-
         });
 
         document.body.addEventListener('completions', (e) => {
@@ -67,61 +87,70 @@ const billing = {
 
         document.body.addEventListener('htmx:afterSwap', (e) => {
             const customerName = document.getElementById('customerName');
-            const customerId = document.getElementById('customerId');
             const method = document.getElementById('method');
 
             if (customerName) {
-                const customerCompletions = new autoComplete({
-                    selector: '#customerName',
-                    threshold: 0,
-                    data: {
-                        src: billing.customers,
-                        keys: ['name'],
-                    },
-                    resultsList: {
-                        maxResults: 20
-                    },
-                    events: {
-                        input: {
-                            selection: (event) => {
-                                const selection = event.detail.selection.value;
-                                customerCompletions.input.value = selection.name;
-                                customerId.value = selection.id;
-                            },
-                            focus: () => {
-                                customerCompletions.start();
-                            },
-                        }
-                    }
-                });
+                billing.initCustomerCompletions();
             }
 
             if (method) {
-                const methodCompletions = new autoComplete({
-                    selector: '#method',
-                    threshold: 0,
-                    data: {
-                        src: billing.methods
-                    },
-                    resultsList: {
-                        maxResults: 20
-                    },
-                    events: {
-                        input: {
-                            selection: (event) => {
-                                const selection = event.detail.selection.value;
-                                methodCompletions.input.value = selection;
-                            },
-                            focus: () => {
-                                methodCompletions.start();
-                            },
-                        }
-                    }
-                });
+                billing.initMethodCompletions();
             }
         });
 
         billing.customEventsAdded = true;
+    },
+
+    initCustomerCompletions : () => {
+        const customerId = document.getElementById('customerId');
+
+        const customerCompletions = new autoComplete({
+            selector: '#customerName',
+            threshold: 0,
+            data: {
+                src: billing.customers,
+                keys: ['name'],
+            },
+            resultsList: {
+                maxResults: 20
+            },
+            events: {
+                input: {
+                    selection: (event) => {
+                        const selection = event.detail.selection.value;
+                        customerCompletions.input.value = selection.name;
+                        customerId.value = selection.id;
+                    },
+                    focus: () => {
+                        customerCompletions.start();
+                    },
+                }
+            }
+        });
+    },
+
+    initMethodCompletions : () => {
+        const methodCompletions = new autoComplete({
+            selector: '#method',
+            threshold: 0,
+            data: {
+                src: billing.methods
+            },
+            resultsList: {
+                maxResults: 20
+            },
+            events: {
+                input: {
+                    selection: (event) => {
+                        const selection = event.detail.selection.value;
+                        methodCompletions.input.value = selection;
+                    },
+                    focus: () => {
+                        methodCompletions.start();
+                    },
+                }
+            }
+        });
     },
 
     initNav : () => {

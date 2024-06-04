@@ -23,11 +23,19 @@ class PaymentController extends Controller
         }
 
         if ($request->method() === 'POST') {
+            if (empty($request->input('customerId'))) {
+                $customers = Customer::select('id', 'name')->get();
+            } else {
+                $customers = Customer::select('id', 'name')->where('archive', 'N')->get();
+            }
+
             $triggerHeader = json_encode([
                 'open-edit' => [
                     'id' => $request->input('paymentId') ?? 0,
                     'customerId' => $request->input('customerId') ?? 0,
                     'invoiceOrPayment' => 'payment',
+                    'customers' => $customers,
+                    'methods' => ['Cash', 'Card', 'Check', 'Transfer'],
                 ]
             ]);
 

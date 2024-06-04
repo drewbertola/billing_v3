@@ -24,11 +24,18 @@ class InvoiceController extends Controller
         }
 
         if ($request->method() === 'POST') {
+            if (empty($request->input('customerId'))) {
+                $customers = Customer::select('id', 'name')->get();
+            } else {
+                $customers = Customer::select('id', 'name')->where('archive', 'N')->get();
+            }
+
             $triggerHeader = json_encode([
                 'open-edit' => [
                     'id' => $request->input('invoiceId') ?? 0,
                     'customerId' => $request->input('customerId') ?? 0,
                     'invoiceOrPayment' => 'invoice',
+                    'customers' => $customers,
                 ]
             ]);
 
