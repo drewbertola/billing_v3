@@ -81,15 +81,10 @@
                 data-bs-dismiss="modal"
                 hx-post="/invoices/save/{{$invoice['id']}}"
                 hx-trigger="click"
-                @if ($isNative)
-                    hx-target="#invoiceRow{{$invoice['id']}}"
-                    @if (empty($invoice['id']))
-                        hx-swap="afterend"
-                    @else
-                        hx-swap="outerHTML"
-                    @endif
+                hx-target="#invoiceRow{{$invoice['id']}}"
+                @if (empty($invoice['id']))
+                    hx-swap="afterend"
                 @else
-                    hx-target="#customerRow{{$invoice['customerId']}}"
                     hx-swap="outerHTML"
                 @endif
             >Save</button>

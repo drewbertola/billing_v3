@@ -49,16 +49,11 @@
             <button type="submit" class="btn btn-primary col-4 col-md-2 mt-2" data-bs-dismiss="modal"
                 hx-post="/payments/save/{{$payment['id']}}"
                 hx-trigger="click"
-                @if ($isNative)
-                    hx-target="#paymentRow{{$payment['id']}"
-                    @if (empty($payment['id']))
-                        hx-swap="afterend"
-                    @else
-                        hx-swap="outerHTML"
-                    @endif
+                hx-target="#paymentRow{{$payment['id']}}"
+                @if (empty($payment['id']))
+                    hx-swap="afterend"
                 @else
-                    hx-target="#trash"
-                    hx-swap="innerHTML"
+                    hx-swap="outerHTML"
                 @endif
             >Save</button>
         </div>

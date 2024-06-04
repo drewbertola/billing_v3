@@ -2,7 +2,7 @@ const billing = {
     customEventsAdded : false,
     showArchived : false,
     customers : [],
-    methods : [],
+    methods : ['Cash, Check, Card, Transfer'],
 
     initCustomEvents : () => {
         if (billing.customEventsAdded) { return; }
@@ -33,6 +33,26 @@ const billing = {
                 .value = billing.formatMoney(e.detail.amount);
             document.getElementById('invoiceAmount' + e.detail.id)
                 .innerHTML = billing.formatMoney(e.detail.amount);
+        });
+
+        document.body.addEventListener('open-edit', (e) => {
+            const interval = setInterval(() => {
+                const modal = document.getElementById(e.detail.invoiceOrPayment + 'Modal');
+                const modalBody = modal.querySelector('.modal-body');
+
+                fetch(
+                    '/' + e.detail.invoiceOrPayment
+                    + 's/edit/' + e.detail.id + '/' + e.detail.customerId
+                )
+                .then(response => { return response.text(); })
+                .then(html => { modalBody.innerHTML = html;
+                    htmx.process(modalBody);
+                    new bootstrap.Modal(modal).show();
+                });
+
+                clearInterval(interval);
+            }, 250);
+
         });
 
         document.body.addEventListener('completions', (e) => {

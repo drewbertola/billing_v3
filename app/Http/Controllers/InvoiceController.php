@@ -23,6 +23,23 @@ class InvoiceController extends Controller
             $invoices = Invoice::orderByDesc('id')->get();
         }
 
+        if ($request->method() === 'POST') {
+            $triggerHeader = json_encode([
+                'open-edit' => [
+                    'id' => $request->input('invoiceId') ?? 0,
+                    'customerId' => $request->input('customerId') ?? 0,
+                    'invoiceOrPayment' => 'invoice',
+                ]
+            ]);
+
+            return response(
+                view('invoiceList', [
+                    'isHtmxRequest' => $request->isHtmxRequest(),
+                    'invoices' => $invoices,
+                ]), 200, ['HX-Trigger' => $triggerHeader]
+            );
+        }
+
         return view('invoiceList', [
             'isHtmxRequest' => $request->isHtmxRequest(),
             'invoices' => $invoices,
@@ -80,7 +97,6 @@ class InvoiceController extends Controller
                 'isHtmxRequest' => $request->isHtmxRequest(),
                 'invoice' => $invoice,
                 'lineItems' => $lineItems,
-                'isNative' => stripos($request->getCurrentUrl(), '/invoices'),
             ]), 200, ['HX-Trigger' => $triggerHeader]
         );
     }

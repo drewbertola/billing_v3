@@ -22,6 +22,23 @@ class PaymentController extends Controller
             $payments = Payment::orderByDesc('id')->get();
         }
 
+        if ($request->method() === 'POST') {
+            $triggerHeader = json_encode([
+                'open-edit' => [
+                    'id' => $request->input('paymentId') ?? 0,
+                    'customerId' => $request->input('customerId') ?? 0,
+                    'invoiceOrPayment' => 'payment',
+                ]
+            ]);
+
+            return response(
+                view('paymentList', [
+                    'isHtmxRequest' => $request->isHtmxRequest(),
+                    'payments' => $payments,
+                ]), 200, ['HX-Trigger' => $triggerHeader]
+            );
+        }
+
         return view('paymentList', [
             'isHtmxRequest' => $request->isHtmxRequest(),
             'payments' => $payments,
@@ -61,7 +78,6 @@ class PaymentController extends Controller
             view('components.paymentForm', [
                 'isHtmxRequest' => $request->isHtmxRequest(),
                 'payment' => $payment,
-                'isNative' => stripos($request->getCurrentUrl(), '/payments'),
             ]), 200, ['HX-Trigger' => $triggerHeader]);
     }
 

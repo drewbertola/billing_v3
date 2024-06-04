@@ -23,12 +23,11 @@
     <td>{{$customer->primaryContact}}</td>
     <td class="text-center">
         <a href="" class="text-decoration-none"
-            data-bs-toggle="modal"
-            data-bs-target="#invoiceModal"
-            hx-get="/invoices/edit/{{$customer->lastInvId}}"
-            hx-target="#invoiceDialog"
+            hx-post="/invoices"
+            hx-vals='{"invoiceId": "{{$customer->lastInvId}}", "_token" : "{{csrf_token()}}"}'
+            hx-target="#content"
             hx-trigger="click"
-            hx-swap="innerHTML">{{$lastInvDate}}</a>
+            hx-push-url="true">{{$lastInvDate}}</a>
     </td>
     <td class="text-end">
         <a href="" class="text-decoration-none"
@@ -41,23 +40,21 @@
     </td>
     <td class="text-center">
         <a href=""
-            data-bs-toggle="modal"
-            data-bs-target="#invoiceModal"
-            hx-get="/invoices/edit/0/{{$customer->id}}"
-            hx-target="#invoiceDialog"
+            hx-post="/invoices"
+            hx-vals='{"customerId": "{{$customer->id}}", "_token" : "{{csrf_token()}}"}'
+            hx-target="#content"
             hx-trigger="click"
-            hx-swap="innerHTML">
+            hx-push-url="true">
             <span class="bi bi-file-earmark-plus-fill text-danger"></span>
         </a>
     </td>
     <td class="text-center">
         <a href=""
-            data-bs-toggle="modal"
-            data-bs-target="#paymentModal"
-            hx-get="/payments/edit/0/{{$customer->id}}"
-            hx-target="#paymentDialog"
+            hx-post="/payments"
+            hx-vals='{"customerId": "{{$customer->id}}", "_token" : "{{csrf_token()}}"}'
+            hx-target="#content"
             hx-trigger="click"
-            hx-swap="innerHTML">
+            hx-push-url="true">
             <span class="bi bi-file-earmark-plus-fill text-success"></span>
         </a>
     </td>

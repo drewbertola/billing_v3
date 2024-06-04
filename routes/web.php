@@ -21,8 +21,10 @@ Route::get('/invoices/edit/{invoiceId}/{customerId?}', [InvoiceController::class
 Route::post('/invoices/save/{invoiceId}', [InvoiceController::class, 'save']);
 Route::get('/invoices/toggle-emailed/{invoiceId}', [InvoiceController::class, 'toggleEmailed']);
 Route::get('/invoices', [InvoiceController::class, 'list']);
+Route::post('/invoices', [InvoiceController::class, 'list']);
 Route::get('/payments/edit/{paymentId}/{customerId?}', [PaymentController::class, 'edit']);
 Route::post('/payments/save/{paymentId}', [PaymentController::class, 'save']);
 Route::get('/payments', [PaymentController::class, 'list']);
+Route::post('/payments', [PaymentController::class, 'list']);
 Route::get('/line-items/edit/{invoiceId}/{lineItemId}', [LineItemController::class, 'edit']);
 Route::post('/line-items/save/{lineItemId}', [LineItemController::class, 'save']);
