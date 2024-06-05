@@ -58,7 +58,7 @@ class LineItemController extends Controller
         }
 
         // Importantly, update the total 'amount' for the associated invoice
-        $invoice = $this->updateInvoiceAmount($lineItem->invoiceId);
+        $invoice = self::updateInvoiceAmount($lineItem->invoiceId);
 
         $lineItems = LineItem::where('invoiceId', $lineItem->invoiceId)->get();
 
@@ -76,7 +76,7 @@ class LineItemController extends Controller
         );
     }
 
-    private function updateInvoiceAmount($invoiceId)
+    public static function updateInvoiceAmount($invoiceId)
     {
         $invoice = Invoice::find($invoiceId);
 

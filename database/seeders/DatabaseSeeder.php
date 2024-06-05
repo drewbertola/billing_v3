@@ -2,8 +2,11 @@
 
 namespace Database\Seeders;
 
-use App\Models\User;
-// use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+use App\Http\Controllers\LineItemController;
+use App\Models\Customer;
+use App\Models\Invoice;
+use App\Models\LineItem;
+use App\Models\Payment;
 use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
@@ -13,11 +16,21 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        // User::factory(10)->create();
+        // add some customers
+        Customer::factory()->count(9)->create();
 
-        User::factory()->create([
-            'name' => 'Test User',
-            'email' => 'test@example.com',
-        ]);
+        // add some payments
+        Payment::factory()->count(60)->create();
+
+        // add some invoices
+        Invoice::factory()->count(60)->create();
+
+        // add some tasks
+        LineItem::factory()->count(180)->create();
+
+        // update invoice amounts
+        foreach(Invoice::all() as $invoice) {
+            LineItemController::updateInvoiceAmount($invoice->id);
+        }
     }
 }

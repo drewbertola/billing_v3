@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use App\Models\Customer;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -17,7 +18,11 @@ class InvoiceFactory extends Factory
     public function definition(): array
     {
         return [
-            //
+            'customerId' => Customer::all()->random()->id,
+            'amount' => 0,
+            'date' => fake()->date(),
+            'emailed' => fake()->randomElement(['Y']),
+            'note' => fake()->paragraph(4),
         ];
     }
 }
