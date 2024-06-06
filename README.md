@@ -32,11 +32,24 @@ composer update
 ```
 php artisan key:generate
 php artisan config:clear
+```
+7.  You can do either:
+```
 php artisan migrate
 php artisan app:register
 ```
-7. Set up a DNS pointer to your configured ServerName
-8. Configure your webserver and restart
-9. Grab certificates from Letsencrypt
-10. Re-configure your webserver for running SSL
-11. Test from a browser
+and optionally - if you just want to have some fake data...
+```
+php artisan db:seed
+```
+or try:
+```
+php artisan app:freshen-db
+```
+which will run migrations (fresh), prompt for a user registration, and optionally seed the db.
+
+8. Set up a DNS pointer to your configured ServerName
+9. Configure your webserver and restart
+10. Grab certificates from Letsencrypt
+11. Re-configure your webserver for running SSL
+12. Test from a browser
